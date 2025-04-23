@@ -11,7 +11,7 @@ data "aws_ami" "app_ami" {
     values = ["hvm"]
   }
 
-  owner-alias = ["amazon"] # Bitnami
+  owner = ["964913206263"] # AWS
 }
 
 resource "aws_instance" "web" {
