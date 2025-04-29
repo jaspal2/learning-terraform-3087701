@@ -3,7 +3,7 @@ data "aws_ami" "app_ami" {
 
   filter {
     name   = "name"
-    values = ["ami-001ae5fd98db07b4b"]
+    values = ["aws-elasticbeanstalk-amzn-2.0.20240223*"]
   }
 
   filter {
@@ -11,7 +11,7 @@ data "aws_ami" "app_ami" {
     values = ["hvm"]
   }
 
-  owners = ["099720109477"]
+  owners = ["964913206263"]
 
  
 }
