@@ -78,7 +78,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
 
-resource "aws_key_pair" "deployer" {
+resource "aws_key_pair" "ssh_key" {
   key_name   = "ssh-key"
   public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKzUBT9HRDJYhhS6rS1cqlXug/Wnv33UZbQ4UIHombPH jaspal.singh@monash.edu"
 }
@@ -88,7 +88,7 @@ resource "aws_instance" "web" {
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.allow_http_https.id]
    subnet_id             = aws_subnet.public.id
-   key_name              = ssh-key
+   key_name              = aws_key_pair.ssh_key.id
   tags = {
     Name = "Terraform instance"
   }
