@@ -26,6 +26,35 @@ resource "aws_vpc" "custom_vpc" {
   }
 }
 
+resource "aws_subnet" "public" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.1.0/24"
+
+  tags = {
+    Name = "Main"
+  }
+}
+
+
+resource "aws_subnet" "private" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.1.0/24"
+
+  tags = {
+    Name = "Main"
+  }
+}
+
+
+resource "aws_network_interface" "foo" {
+  subnet_id   = aws_subnet.public.id
+  private_ips = ["172.16.10.100"]
+
+  tags = {
+    Name = "primary_network_interface"
+  }
+}
+
 resource "aws_security_group" "allow_http_https" {
   name        = "allow_https/https"
   description = "Allow TLS inbound traffic and all outbound traffic"
@@ -55,6 +84,11 @@ resource "aws_instance" "web" {
   ami           = data.aws_ami.app_ami.id
   instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.allow_http_https.id]
+  
+  network_interface {
+    network_interface_id = aws_network_interface.foo.id
+    device_index         = 0
+  }
 
   tags = {
     Name = "HelloWorld"
