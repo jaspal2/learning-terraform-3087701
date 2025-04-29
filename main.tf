@@ -75,7 +75,7 @@ resource "aws_instance" "web" {
   ami           = data.aws_ami.app_ami.id
   instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.allow_http_https.id]
-   subnet_id = aws_security_group.public.id
+   subnet_id = aws_subnet.public.id
   tags = {
     Name = "HelloWorld"
   }
