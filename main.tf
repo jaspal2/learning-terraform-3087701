@@ -3,13 +3,15 @@ data "aws_ami" "app_ami" {
 
   filter {
     name   = "name"
-    values = ["ami-0f6a1a6507c55c9a8"]
+    values = ["ami-001ae5fd98db07b4b"]
   }
 
   filter {
     name   = "virtualization-type"
     values = ["hvm"]
   }
+
+  owners = ["099720109477"]
 
  
 }
