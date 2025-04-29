@@ -83,6 +83,33 @@ resource "aws_key_pair" "ssh_key" {
   public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKzUBT9HRDJYhhS6rS1cqlXug/Wnv33UZbQ4UIHombPH jaspal.singh@monash.edu"
 }
 
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.custom_vpc.id
+
+  tags = {
+    Name = "terraform gateway"
+  }
+}
+
+resource "aws_route_table" "public_route_table" {
+  vpc_id         = aws_vpc.example.id
+  route {
+    cidr_block   = "0.0.0.0/0"
+    gateway_id   = aws_internet_gateway.gw.id
+  }
+  tags           = {
+    Name = "public_route_table"
+  }
+}
+
+
+resource "aws_route_table_association" "associate_route_to_subnet" {
+  subnet_id      = aws_subnet.public.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+
+
 resource "aws_instance" "web" {
   ami                    = data.aws_ami.app_ami.id
   instance_type          = var.instance_type
