@@ -45,7 +45,7 @@ resource "aws_subnet" "private" {
 }
 
 
-module "module_service_sg" {
+module "module_sg" {
   source = "terraform-aws-modules/security-group/aws"
 
   name                     = "module_service_group"
@@ -93,7 +93,7 @@ resource "aws_instance" "web" {
   ami                    = data.aws_ami.app_ami.id
   instance_type          = var.instance_type
   associate_public_ip_address = true
-  vpc_security_group_ids = [aws_security_group.allow_http_https.id]
+  vpc_security_group_ids = module.module_sg.security_group_id
    subnet_id             = aws_subnet.public.id
    key_name              = aws_key_pair.ssh_key.id
   tags = {
