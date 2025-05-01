@@ -94,8 +94,9 @@ resource "aws_instance" "web" {
   instance_type          = var.instance_type
   associate_public_ip_address = true
   vpc_security_group_ids = [module.module_sg.security_group_id]
-   subnet_id             = aws_subnet.public.id
-   key_name              = aws_key_pair.ssh_key.id
+  associate_public_ip_address = true
+  subnet_id             = aws_subnet.public.id
+  key_name              = aws_key_pair.ssh_key.id
   tags = {
     Name = "Terraform instance"
   }
