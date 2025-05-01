@@ -57,25 +57,31 @@ resource "aws_security_group" "allow_http_https" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
-  security_group_id = aws_security_group.allow_http_https.id
+  security_group_id = module.module_service_sg.security_group_id
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 443
   ip_protocol       = "tcp"
   to_port           = 443
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
-  security_group_id = aws_security_group.allow_http_https.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 22
-  ip_protocol       = "tcp"
-  to_port           = 22
-}
+module "module_service_sg" {
+  source = "terraform-aws-modules/security-group/aws"
 
-resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
-  security_group_id = aws_security_group.allow_http_https.id
-  cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "-1" # semantically equivalent to all ports
+  name        = "module_service_group"
+  description = "Security group for user-service with custom ports open within VPC, and PostgreSQL publicly open"
+  vpc_id      = "vpc-12345678"
+
+  ingress_cidr_blocks      = ["10.10.0.0/16"]
+  ingress_rules            = ["http=80-tcp","https-443-tcp"]
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 8080
+      to_port     = 8090
+      protocol    = "tcp"
+      description = "User-service ports"
+      cidr_blocks = "10.10.0.0/16"
+    }
+  ]
 }
 
 resource "aws_key_pair" "ssh_key" {
