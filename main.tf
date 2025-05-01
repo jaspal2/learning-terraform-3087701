@@ -35,7 +35,6 @@ resource "aws_subnet" "public" {
   }
 }
 
-
 resource "aws_subnet" "private" {
   vpc_id     = aws_vpc.custom_vpc.id
   cidr_block = "10.0.2.0/24"
@@ -46,33 +45,15 @@ resource "aws_subnet" "private" {
 }
 
 
-resource "aws_security_group" "allow_http_https" {
-  name        = "allow_https/https"
-  description = "Allow TLS inbound traffic and all outbound traffic"
-  vpc_id      = aws_vpc.custom_vpc.id
-
-  tags = {
-    Name = "allow_http(s)"
-  }
-}
-
-resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
-  security_group_id = module.module_service_sg.security_group_id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 443
-  ip_protocol       = "tcp"
-  to_port           = 443
-}
-
 module "module_service_sg" {
   source = "terraform-aws-modules/security-group/aws"
 
-  name        = "module_service_group"
-  description = "Security group for user-service with custom ports open within VPC, and PostgreSQL publicly open"
-  vpc_id      = "vpc-12345678"
-
-  ingress_cidr_blocks      = ["10.10.0.0/16"]
-  ingress_rules            = ["http=80-tcp","https-443-tcp"]
+  name                     = "module_service_group"
+  description              = "Security group for user-service with custom ports open within VPC, and PostgreSQL publicly open"
+  vpc_id                   = aws_vpc.custom_vpc.id
+  ingress_cidr_blocks      = ["0.0.0.0/0"]
+  ingress_rules            = ["http-80-tcp","https-443-tcp"]
+  egress_rules             = [ "all-all" ]
   
 }
 
