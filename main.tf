@@ -204,7 +204,7 @@ module "asg" {
       delete_on_termination = true
       description           = "eth0"
       device_index          = 0
-      security_groups       = module.module_sg.security_group_id
+      security_groups       = [module.module_sg.security_group_id]
     }
   ]
 
