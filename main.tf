@@ -113,7 +113,7 @@ module "asg" {
   desired_capacity          = 1
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
-  vpc_zone_identifier       = [aws_subnet.public]
+  vpc_zone_identifier       = [aws_subnet.public.id]
 
 
   instance_refresh = {
