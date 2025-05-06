@@ -132,11 +132,13 @@ module "asg" {
   launch_template_name        = "example-asg"
   launch_template_description = "Launch template example"
   update_default_version      = true
+  key_name                    = aws_key_pair.ssh_key.id
 
   image_id          = data.aws_ami.app_ami.id
   instance_type     = "t3.micro"
   ebs_optimized     = true
   enable_monitoring = true
+
 
   # IAM role & instance profile
   create_iam_instance_profile = true
@@ -203,31 +205,17 @@ module "asg" {
       description           = "eth0"
       device_index          = 0
       security_groups       = module.module_sg.security_group_id
-    },
-    {
-      delete_on_termination = true
-      description           = "eth1"
-      device_index          = 1
-      security_groups       = module.module_sg.security_group_id
     }
   ]
 
   placement = {
-    availability_zone = "us-west-1b"
+    availability_zone = "ap-southeast-2"
   }
 
   tag_specifications = [
     {
       resource_type = "instance"
       tags          = { WhatAmI = "Instance" }
-    },
-    {
-      resource_type = "volume"
-      tags          = { WhatAmI = "Volume" }
-    },
-    {
-      resource_type = "spot-instances-request"
-      tags          = { WhatAmI = "SpotInstanceRequest" }
     }
   ]
 
