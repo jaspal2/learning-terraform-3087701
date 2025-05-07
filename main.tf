@@ -3,7 +3,7 @@ data "aws_ami" "app_ami" {
 
   filter {
     name   = "name"
-    values = [variables.ami_filter.ami_name]
+    values = [var.ami_filter.ami_name]
   }
 
   filter {
@@ -11,7 +11,7 @@ data "aws_ami" "app_ami" {
     values = ["hvm"]
   }
 
-  owners = [variables.ami_filter.ami_owner]
+  owners = [var.ami_filter.ami_owner]
 
  
 }
