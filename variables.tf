@@ -7,8 +7,8 @@ variable "ami_filter" {
   description      = "Instance AMI and AMI owner"
 
   type             = object({
-    ami_name       = "string"
-    ami_owner       = "string"
+    ami_name       = string
+    ami_owner       = string
   })
   default         = {
     ami_name       = "aws-elasticbeanstalk-amzn-2.0.20240223*"
