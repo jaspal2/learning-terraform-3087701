@@ -15,3 +15,9 @@ variable "ami_filter" {
     ami_owner       = "964913206263"
   }
 }
+
+variable "subnet_prefix" {
+  description              = "Subnet prefix"
+  type                     = string
+  default                  = "10.0"
+}
